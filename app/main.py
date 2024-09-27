@@ -1,5 +1,14 @@
+# app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from .routes import router
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+# Inicializa o Firebase
+cred = credentials.Certificate("firebase_credentials.json")
+firebase_admin.initialize_app(cred)
+
 app = FastAPI()
 
 @app.get("/")
@@ -13,3 +22,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(router, prefix="/api")  # Inclui o roteador
